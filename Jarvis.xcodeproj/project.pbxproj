@@ -16,6 +16,10 @@
 		E16C529B2A0729B3008868AB /* JarvisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16C529A2A0729B3008868AB /* JarvisTests.swift */; };
 		E16C52A52A0729B3008868AB /* JarvisUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16C52A42A0729B3008868AB /* JarvisUITests.swift */; };
 		E16C52A72A0729B3008868AB /* JarvisUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16C52A62A0729B3008868AB /* JarvisUITestsLaunchTests.swift */; };
+		E16C52B82A0730F4008868AB /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = E16C52B72A0730F4008868AB /* OpenAI */; };
+		E16C52BA2A07335F008868AB /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16C52B92A07335F008868AB /* ChatViewModel.swift */; };
+		E16C52BC2A073744008868AB /* ChatViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16C52BB2A073744008868AB /* ChatViewModelProtocol.swift */; };
+		E16C52BE2A0741ED008868AB /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16C52BD2A0741ED008868AB /* SpeechRecognizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,9 @@
 		E16C52A02A0729B3008868AB /* JarvisUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JarvisUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E16C52A42A0729B3008868AB /* JarvisUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisUITests.swift; sourceTree = "<group>"; };
 		E16C52A62A0729B3008868AB /* JarvisUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E16C52B92A07335F008868AB /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		E16C52BB2A073744008868AB /* ChatViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModelProtocol.swift; sourceTree = "<group>"; };
+		E16C52BD2A0741ED008868AB /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E16C52B82A0730F4008868AB /* OpenAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +107,7 @@
 		E16C52822A0729B2008868AB /* Jarvis */ = {
 			isa = PBXGroup;
 			children = (
+				E16C52B32A072CD4008868AB /* Model */,
 				E16C52832A0729B2008868AB /* JarvisApp.swift */,
 				E16C52852A0729B2008868AB /* Persistence.swift */,
 				E16C528A2A0729B2008868AB /* ContentView.swift */,
@@ -135,6 +144,16 @@
 			path = JarvisUITests;
 			sourceTree = "<group>";
 		};
+		E16C52B32A072CD4008868AB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E16C52B92A07335F008868AB /* ChatViewModel.swift */,
+				E16C52BB2A073744008868AB /* ChatViewModelProtocol.swift */,
+				E16C52BD2A0741ED008868AB /* SpeechRecognizer.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -151,6 +170,9 @@
 			dependencies = (
 			);
 			name = Jarvis;
+			packageProductDependencies = (
+				E16C52B72A0730F4008868AB /* OpenAI */,
+			);
 			productName = Jarvis;
 			productReference = E16C52802A0729B2008868AB /* Jarvis.app */;
 			productType = "com.apple.product-type.application";
@@ -223,6 +245,9 @@
 				Base,
 			);
 			mainGroup = E16C52772A0729B2008868AB;
+			packageReferences = (
+				E16C52B62A0730F4008868AB /* XCRemoteSwiftPackageReference "OpenAI" */,
+			);
 			productRefGroup = E16C52812A0729B2008868AB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -266,8 +291,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E16C52842A0729B2008868AB /* JarvisApp.swift in Sources */,
+				E16C52BE2A0741ED008868AB /* SpeechRecognizer.swift in Sources */,
 				E16C52862A0729B2008868AB /* Persistence.swift in Sources */,
 				E16C528B2A0729B2008868AB /* ContentView.swift in Sources */,
+				E16C52BA2A07335F008868AB /* ChatViewModel.swift in Sources */,
+				E16C52BC2A073744008868AB /* ChatViewModelProtocol.swift in Sources */,
 				E16C52892A0729B2008868AB /* Jarvis.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,6 +453,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Jarvis/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Converts your voice to text";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Translate your voice to a chat";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -461,6 +491,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Jarvis/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Converts your voice to text";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Translate your voice to a chat";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -612,6 +644,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E16C52B62A0730F4008868AB /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E16C52B72A0730F4008868AB /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E16C52B62A0730F4008868AB /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		E16C52872A0729B2008868AB /* Jarvis.xcdatamodeld */ = {

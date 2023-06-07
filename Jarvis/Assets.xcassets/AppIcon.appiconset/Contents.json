@@ -1,56 +1,67 @@
 {
   "images" : [
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
     },
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27 10.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "16x16"
     },
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27 9.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "16x16"
     },
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27 8.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "32x32"
     },
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27 7.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
     },
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27 6.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27 2.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27 4.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
     },
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27 5.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27 1.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
+      "filename" : "cobra2326_iron_man_Jarvis_app_icon_16d31689-d5d0-4d7c-9473-98b664712c27 3.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"

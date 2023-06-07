@@ -7,70 +7,135 @@
 
 import SwiftUI
 import CoreData
+import AVFoundation
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    
+    @ObservedObject private var chatViewModel: ChatViewModel
 
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
+    
+    init(chatViewModel: ChatViewModel) {
+        self.chatViewModel = chatViewModel
+    }
+    
+    @State private var prompt: String = ""
+    @State private var disabled: Bool = false
+    @StateObject var speechRecognizer = SpeechRecognizer()
+    @State private var transcribing = false
+    @State private var timer: Timer?
+    
+    
+    func submitPrompt(_ prompt: String) async throws {
+        disabled = true
+        defer {
+            disabled = false
+        }
+        try await self.chatViewModel.fetchResponse(prompt: prompt)
+        self.prompt = ""
+    }
 
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
+        VStack {
+            ScrollView {
+                ScrollViewReader { value in
+                    VStack {
+                        ForEach(chatViewModel.messages, id: \.content) { message in
+                            ZStack {
+                                message.role == .user ? Color.white : Color(red: 0.9, green: 0.9, blue: 0.9)
+                                Text(message.content).padding().frame(
+                                    minWidth: 0,
+                                    maxWidth: .infinity,
+                                    alignment: .topLeading
+                                )
+                            }
+                        }
+                        Text("").id("_bottom_")
+                    }
+                    .onChange(of: chatViewModel.messages) { _ in
+                        value.scrollTo("_bottom_", anchor: .bottom)
+                    }
+                    .onChange(of: chatViewModel.isSpeaking) {_ in
+                        value.scrollTo("_bottom_", anchor: .bottom)
                     }
                 }
-                .onDelete(perform: deleteItems)
             }
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+
+            
+            ZStack {
+                Color.white
+                if transcribing {
+                    LinearGradient(gradient: Gradient(colors: [.blue, .purple]), startPoint: .top, endPoint: .bottom)
+                        .mask(Image(systemName: "mic.fill").resizable().scaledToFit().frame(maxWidth: 40))
+                } else {
+                    if disabled {
+                        Section {
+                            ProgressView().background(Color.white).frame(width: 40, height: 40)
+                                .scaleEffect(2)
+                        }
+                    } else {
+                        Image(systemName: "mic.fill").resizable().scaledToFit().frame(maxWidth: 40)
                     }
                 }
+                    
+            }.frame(maxHeight:40)
+            .onTapGesture {
+                chatViewModel.stopSpeaking()
+                
+                if !transcribing {
+                    speechRecognizer.startTranscribing()
+                    transcribing = true
+                    
+                    timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
+                        stopTranscribing()
+                    }
+
+                } else {
+                    stopTranscribing()
+                }
             }
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            .onChange(of: chatViewModel.isSpeaking) { _ in
+                if !chatViewModel.isSpeaking {
+                    speechRecognizer.startTranscribing()
+                    transcribing = true
+                }
             }
+            .onChange(of: speechRecognizer.transcript) { _ in
+                timer?.invalidate()
+                timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { _ in
+                    stopTranscribing()
+                }
+            }
+
+            
+            HStack(alignment: .center) {
+                TextField("Prompt", text: $prompt).disabled(disabled).onSubmit {
+                    Task { try await submitPrompt(prompt) }
+                }.onChange(of: speechRecognizer.transcript) { _ in
+                    prompt = speechRecognizer.transcript
+                }
+                
+                Button("Submit") {
+                    Task { try await submitPrompt(prompt) }
+                }.disabled(disabled)
+            }.frame(minWidth: 100, maxWidth: .infinity, minHeight: 50, maxHeight: 50)
+                .background(Color.white)
+                .padding()
         }
+        .frame(maxHeight: .infinity, alignment: .bottom)
+        
     }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+    
+    func stopTranscribing() {
+        timer?.invalidate()
+        timer = Optional.none
+        speechRecognizer.stopTranscribing()
+        let prompt = speechRecognizer.transcript
+        transcribing = false
+        
+        if !prompt.isEmpty {
+            Task {
+                try await submitPrompt(prompt)
             }
         }
     }
@@ -83,8 +148,8 @@ private let itemFormatter: DateFormatter = {
     return formatter
 }()
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView(chatViewModel: ).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+//    }
+//}
